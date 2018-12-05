@@ -70,14 +70,12 @@ export default {
   .main {
     width: 1200px;
     height: 100%;
-    border: 1px solid red;
     margin: 0 auto;
     display: flex;
     &_1 {
       padding-left: 20px;
       display: flex;
       align-items: center;
-      border: 1px solid red;
       img:last-child {
         margin-left: 8px;
       }
