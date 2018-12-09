@@ -10,7 +10,7 @@
       <nav class="main_2">
         <span v-for="(item,index) in arr.navArr"
               :key="index"
-              :class="{'navhover':index==1}"
+              :class="{'navhover':item.router==$route.fullPath}"
               @click="goRouter(item)">{{item.name}}</span>
       </nav>
       <nav class="main_3">
@@ -29,7 +29,7 @@ export default {
         navArr: [
           {
             name: "首页",
-            router: "/index"
+            router: "/"
           },
           {
             name: "购买网店",
@@ -52,7 +52,9 @@ export default {
     };
   },
 
-  created() {},
+  created() {
+    console.log(this.$route);
+  },
   methods: {
     goRouter(obj) {
       console.log(obj);
@@ -95,6 +97,7 @@ export default {
         padding-bottom: 15px;
       }
       .navhover {
+        padding-bottom: 13px;
         color: rgba(254, 113, 4, 1);
         border-bottom: 2px solid rgba(254, 112, 4, 1);
       }

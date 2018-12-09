@@ -6,9 +6,16 @@ import router from './router';
 import '../src/assets/css/reset.css';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import { Input, Slider } from 'element-ui';
+import { Input, Slider, Pagination, Radio, RadioGroup, Button, Checkbox, CheckboxGroup } from 'element-ui';
 Vue.use(Input);
 Vue.use(Slider);
+Vue.use(Pagination);
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(Button);
+Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

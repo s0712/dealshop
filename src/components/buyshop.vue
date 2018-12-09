@@ -3,7 +3,7 @@
     <img src="../../src/assets/img/bug/banner.png"
          alt="">
     <main>
-      <selects></selects>
+      <selects :path="$route.fullPath"></selects>
       <li class="list"
           v-for="n in 10"
           :key="n">
@@ -18,18 +18,23 @@
           <p><span>所属行业:家居用品</span><span>所属地区:家居用品</span><span>商城类型:家居用品</span><span>所属行业:家居用品</span></p>
         </div>
       </li>
+      <page></page>
     </main>
-
+    <foot></foot>
   </section>
 </template>
 <script>
-import selects from "../components/parts/selects";
+import selects from "../components/parts/selects"; //选项
+import page from "../components/parts/page"; //分页
+import foot from "../components/parts/foot"; //底部
 export default {
   data() {
     return {};
   },
   components: {
-    selects
+    selects,
+    page,
+    foot
   },
   created() {},
   methods: {}
