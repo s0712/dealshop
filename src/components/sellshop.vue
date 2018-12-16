@@ -1,21 +1,20 @@
 <template>
   <section class="sellshop">
-    <img src="../../src/assets/img/bug/banner.png"
-         alt="">
+    <div class="banner"></div>
     <main>
-      <h1>简单填写资料后，我们的卖家服务顾问会尽快和您联系 <br>您也可以直接联系我们的销售顾问进行挂店</h1>
+
       <p class="tishi">请选择您的店铺出售类型：</p>
       <div class="content">
-        <el-radio-group v-model="radio2">
-          <el-radio :label="3">备选项</el-radio>
-          <el-radio :label="6">备选项</el-radio>
-          <el-radio :label="9">备选项</el-radio>
+        <el-radio-group v-model="form.type">
+          <el-radio :label="0">淘宝店</el-radio>
+          <el-radio :label="1">天猫店</el-radio>
+          <el-radio :label="2">其他网店</el-radio>
         </el-radio-group>
         <div class="selectinput">
           <img src="../assets/img/sellshop/a1.png"
                alt="">
           <el-input placeholder="请输入您的姓名"
-                    v-model="input23">
+                    v-model="form.name">
           </el-input>
 
         </div>
@@ -23,7 +22,7 @@
           <img src="../assets/img/sellshop/a2.png"
                alt="">
           <el-input placeholder="请输入您的手机号"
-                    v-model="input23">
+                    v-model="form.mobile">
           </el-input>
 
         </div>
@@ -31,7 +30,7 @@
           <img src="../assets/img/sellshop/a3.png"
                alt="">
           <el-input placeholder="请输入您的QQ号"
-                    v-model="input23">
+                    v-model="form.qq">
 
           </el-input>
 
@@ -41,12 +40,14 @@
                alt="">
           <el-input type="textarea"
                     placeholder="请填写您希望出售的网店收益的链接或者旺旺名"
-                    v-model="textarea">
+                    v-model="form.link">
 
           </el-input>
         </div>
+        <h1>*简单填写资料后，我们的卖家服务顾问会尽快和您联系,您也可以直接联系我们的销售顾问进行挂店</h1>
         <p class="footer">
-          <el-button type="primary">立即提交</el-button>
+          <el-button type="primary"
+                     @click="sellShop">立即提交</el-button>
           <el-button type="primary">在线咨询</el-button>
 
         </p>
@@ -60,22 +61,42 @@ import foot from "../components/parts/foot";
 export default {
   data() {
     return {
-      radio2: 3,
-      input23: "",
-      textarea: ""
+      form: {
+        type: "", //网店类型0淘宝1天猫2其他
+        name: "", //姓名
+        mobile: "", //手机号
+        link: "", //网店链接或旺旺名
+        qq: "" //qq号码
+      }
     };
   },
   components: {
     foot
   },
-  created() {},
-  methods: {}
+  created() {
+    this.formCopy = _.clone(this.form);
+  },
+  methods: {
+    sellShop() {
+      this.$axios
+        .get(this.$location.storesell, {
+          params: {
+            ...this.form
+          }
+        })
+        .then(res => {
+          this.$message(res.msg);
+          this.form = _.clone(this.formCopy);
+        });
+    }
+  }
 };
 </script>
 <style  lang="scss">
 .sellshop {
-  > img {
-    width: 1920px;
+  .banner {
+    background: url("../assets/img/bug/banner1.jpg") no-repeat center center;
+    height: 130px;
   }
   main {
     overflow: hidden;
@@ -85,15 +106,7 @@ export default {
     box-shadow: 0px 0px 6px 0px rgba(33, 33, 33, 0.2);
     border-radius: 10px;
     margin: 10px auto 200px;
-    h1 {
-      width: 578px;
-      font-size: 24px;
-      font-family: MicrosoftYaHei;
-      font-weight: 400;
-      color: rgba(62, 62, 62, 1);
-      margin: 0 auto;
-      margin-top: 30px;
-    }
+
     .tishi {
       width: 578px;
       height: 17px;
@@ -108,6 +121,16 @@ export default {
     .content {
       width: 480px;
       margin: 30px auto;
+      h1 {
+        font-size: 12px;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        color: red;
+        margin: 0 auto;
+        margin-top: 5px;
+        text-align: left;
+        margin-bottom: 30px;
+      }
       .el-radio-group {
         width: 100%;
         display: flex;

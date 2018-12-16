@@ -1,13 +1,13 @@
 <template>
   <section class="auctionshop">
-    <img src="../../src/assets/img/bug/banner.png"
-         alt="">
+    <div class="banner"></div>
     <selects :path="$route.fullPath"></selects>
     <main>
 
       <li class="list"
           v-for="n in 10"
-          :key="n">
+          :key="n"
+          @click="toInfo(n)">
         <div class="top">
           <p><img src="../../src/assets/img/bug/a9.png"
                  alt="">
@@ -63,18 +63,27 @@ export default {
   created() {
     console.log(this.$route);
   },
-  methods: {}
+  methods: {
+    toInfo(id) {
+      //天猫type->1 淘宝->2  /:id/type
+      let url = `${location.href}/${id}/1`;
+      console.log(url);
+      window.open(url);
+    }
+  }
 };
 </script>
 <style lang="scss">
 .auctionshop {
-  > img {
-    width: 1920px;
+  .banner {
+    background: url("../assets/img/bug/banner1.jpg") no-repeat center center;
+    height: 130px;
   }
   main {
     width: 1200px;
     margin: 0 auto;
     .list {
+      cursor: pointer;
       width: 1200px;
       height: 250px;
       background: rgba(255, 255, 255, 1);

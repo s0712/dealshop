@@ -14,9 +14,9 @@
               @click="goRouter(item)">{{item.name}}</span>
       </nav>
       <nav class="main_3">
-        <span :class="{'hover':true}">登录</span>
+        <span @click="goRouter(arr.rightnagv[0])">登录</span>
         <em></em>
-        <span>免费注册</span>
+        <span @click="goRouter(arr.rightnagv[1])">免费注册</span>
       </nav>
     </div>
   </section>
@@ -46,6 +46,20 @@ export default {
           {
             name: "网店拍卖",
             router: "/auctionshop"
+          },
+          {
+            name: "个人中心",
+            router: "/self"
+          }
+        ],
+        rightnagv: [
+          {
+            name: "登录",
+            router: "/login"
+          },
+          {
+            name: "注册",
+            router: "/sign"
           }
         ]
       }
@@ -53,7 +67,7 @@ export default {
   },
 
   created() {
-    console.log(this.$route);
+    // console.log(this.$route);
   },
   methods: {
     goRouter(obj) {
@@ -75,7 +89,7 @@ export default {
     margin: 0 auto;
     display: flex;
     &_1 {
-      padding-left: 20px;
+      padding-left: 10px;
       display: flex;
       align-items: center;
       img:last-child {
@@ -95,6 +109,7 @@ export default {
       span {
         margin-right: 80px;
         padding-bottom: 15px;
+        cursor: pointer;
       }
       .navhover {
         padding-bottom: 13px;
@@ -103,7 +118,7 @@ export default {
       }
     }
     &_3 {
-      padding-right: 20px;
+      padding-right: 10px;
       display: flex;
       justify-content: center;
       align-items: flex-end;
@@ -118,8 +133,10 @@ export default {
         background: rgba(153, 153, 153, 1);
         margin: -3px 17px 0 17px;
       }
-      .hover {
+      span:hover {
         color: rgba(255, 110, 0, 1);
+        text-decoration: underline;
+        cursor: pointer;
       }
     }
   }

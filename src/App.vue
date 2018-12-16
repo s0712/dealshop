@@ -2,7 +2,7 @@
   <div id="app">
 
     <headpart v-on:returnRouter="returnRouter"></headpart>
-    <router-view />
+    <router-view class="view" />
   </div>
 </template>
 
@@ -26,13 +26,21 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
-  border: 1px solid red;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   overflow-x: hidden;
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .view {
+    flex: 1;
+    overflow-y: auto;
+    background: #fffcf4;
+  }
 }
 </style>

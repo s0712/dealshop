@@ -1,21 +1,24 @@
 <template>
   <section class="buyshop">
-    <img src="../../src/assets/img/bug/banner.png"
-         alt="">
+
+    <div class="banner"></div>
     <main>
-      <selects :path="$route.fullPath"></selects>
+      <selects :path="$route.fullPath"
+               @returnForm='returnForm'></selects>
       <li class="list"
-          v-for="n in 10"
-          :key="n">
+          v-for="(n,index) in arr.dataList"
+          :key="index"
+          @click="toInfo(n)">
         <div class="top">
-          <p><img src="../../src/assets/img/bug/a9.png"
+          <p><img :src="n.store_logo"
                  alt="">
-            <span class="title">杭州地区主营枕头旗舰店名字好听优质店铺诚心出售</span><span class="tag">动态全红</span><span class="tag">优质店铺</span><span class="tag">一级类目</span></p>
-          <span>30.00万</span>
+            <span class="title">{{n.store_active_title}}</span><span class="tag">动态全红</span><span class="tag">优质店铺</span><span class="tag">一级类目</span></p>
+          <span>{{n.store_money/10000}}万</span>
         </div>
         <div class="bottom">
-          <p><span>所属行业:家居用品</span><span>所属地区:家居用品</span><span>商城类型:家居用品</span><span>所属行业:家居用品</span><span>所属行业:家居用品</span></p>
-          <p><span>所属行业:家居用品</span><span>所属地区:家居用品</span><span>商城类型:家居用品</span><span>所属行业:家居用品</span></p>
+          <p><span>所属行业: {{n.trade_title}}</span><span>所属地区: {{n.store_place_id}}</span><span>商城类型: {{n.type_title}}</span><span>纳税资质： {{n.store_tax}}</span><span>消保金： {{n.store_margin_money}}</span></p>
+          <p><span>技术年费： {{n.store_annual_fee}}</span><span>动态评分：<img src="../assets/img/bug/a10.png"
+                   alt=""></span><span>违规扣分：{{n.store_part_of}}</span><span>商标类型： {{n.store_brand}}</span></p>
         </div>
       </li>
       <page></page>
@@ -29,21 +32,61 @@ import page from "../components/parts/page"; //分页
 import foot from "../components/parts/foot"; //底部
 export default {
   data() {
-    return {};
+    return {
+      form: {},
+      arr: {
+        dataList: []
+      }
+    };
   },
+
   components: {
     selects,
     page,
     foot
   },
   created() {},
-  methods: {}
+  methods: {
+    toInfo(obj) {
+      console.log(obj);
+      //天猫type->1 淘宝->2  /:id/type
+      let url = `${location.href}/${obj.store_id}/${obj.store_terr_id}`;
+      console.log(url);
+      window.open(url);
+    },
+    returnForm(val) {
+      console.log("返回的数据", val);
+      this.form = _.clone(val);
+
+      console.log(this.form);
+      this.getList();
+    },
+    getList() {
+      this.$axios
+        .get(this.$location.storelist, {
+          params: {
+            ...this.form,
+            letter:
+              this.form.terr && this.form.terr == 2
+                ? this.form.letter.join(",")
+                : ""
+          }
+        })
+        .then(res => {
+          this.arr.dataList = _.get(res, "data", []);
+          console.log(this.arr.dataList);
+        });
+    }
+  }
 };
 </script>
 <style scoped lang="scss">
 .buyshop {
-  > img {
-    width: 1920px;
+  .banner {
+    background: url("../assets/img/bug/banner1.jpg") no-repeat center center;
+    height: 130px;
+    width: 100%;
+    border: 1px solid red;
   }
   main {
     margin: 0 auto;
@@ -117,11 +160,18 @@ export default {
           padding: 0 10px;
           margin: 0 20px;
           span {
+            width: 160px;
+            display: flex;
+            align-items: center;
+            text-align: left;
             margin-right: 66px;
             font-size: 14px;
             font-family: MicrosoftYaHei;
             font-weight: 400;
             color: rgba(102, 102, 102, 1);
+            img {
+              margin-left: 5px;
+            }
           }
         }
       }

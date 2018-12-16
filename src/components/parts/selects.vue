@@ -2,36 +2,63 @@
   <section class="selects">
     <div class="selectinput">
       <el-input placeholder="填写关键词或网站编号"
-                v-model="input23">
+                v-model="form.title"
+                @keydown.enter.native='returnSelection'>
+
       </el-input>
       <img src="../../assets/img/bug/a3.png"
-           alt="">
+           alt=""
+           @click="returnSelection">
     </div>
     <li class="item">
       <p class="title">所在平台</p>
-      <div class="list"><span :class="{'active':true}">天猫商城</span> <span>企业淘宝</span></div>
+      <div class="list">
+        <span v-for="(n,index) in arr.terrArr"
+              :key="index">
+          <font :class="{'active':n.terr_id==form.terr}"
+                @click="form.terr=n.terr_id;arr.typeArr=n.type;returnSelection()">{{n.terr_title+n.terr_id}}</font>
+        </span> </div>
     </li>
-    <li class="item">
+    <li class="item"
+        v-if="form.terr==1">
       <p class="title">商城类型</p>
-      <div class="list"><span :class="{'active':true}">旗舰店</span> <span>专营店</span><span>专卖店</span></div>
+      <div class="list"><span v-for="(n,index) in arr.typeArr"
+              :key="index">
+          <font :class="{'active':n.type_id==form.type}"
+                @click="form.type=n.type_id;returnSelection()">{{n.type_title}}</font>
+        </span> </div>
     </li>
     <li class="item"
-        v-if="other.active==1">
+        v-if="form.terr==1">
+      <p class="title">商标类型</p>
+      <div class="list"><span v-for="(n,index) in arr.brandArr"
+              :key="index">
+          <font :class="{'active':index==form.brand}"
+                @click="form.brand=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+
+    <li class="item"
+        v-if="form.terr==2">
       <p class="title">店铺状态</p>
-      <div class="list"><span :class="{'active':true}">全部</span> <span>等待升级企业店铺</span><span>已是企业店铺</span>
-      </div>
+      <div class="list dpzt"><span v-for="(n,index) in arr.typeArr"
+              :key="index">
+          <font :class="{'active':n.type_id==form.type}"
+                @click="form.type=n.type_id;returnSelection()">{{n.type_title}}</font>
+        </span> </div>
     </li>
+
     <li class="item"
-        v-if="other.active==1">
+        v-if="form.terr==2">
       <p class="title">信用等级</p>
-      <div class="list xinyong"><span :class="{'active':true}">不限</span>
+      <div class="list xinyong">
         <div class="deng">
-          <el-slider v-model="value9"
+          <el-slider v-model="form.letter"
                      range
                      show-stops
                      :min="1"
                      :max="15"
-                     :format-tooltip="formatTooltip">
+                     :format-tooltip="(val)=>{formatTooltip(val);}">
           </el-slider>
           <div class="deng_ke">
             <span>钻<img src="../../assets/img/bug/a6.png"
@@ -60,14 +87,114 @@
             </p>
           </div>
         </div>
-        <font>确认</font>
+        <font @click="returnSelection()">确认</font>
       </div>
     </li>
     <li class="item">
       <p class="title">所属行业</p>
-      <div class="list suoshu"><span><a :class="{'active':true}">全部</a></span><span>服装鞋包</span><span>美容护理</span><span>数码电器</span><span>游戏/话费</span><span>食品/保健</span><span>母婴</span><span>运动户外</span><span>家装家饰</span><span>家居用品</span><span>珠宝/首饰</span><span>汽车配件</span><span>书籍音像</span><span>玩乐/收藏</span><span>手机</span><span>大家电</span><span>其他行业</span></div>
+      <div class="list"><span v-for="(n,index) in arr.trade"
+              :key="index">
+          <font :class="{'active':n.trade_id==form.trade}"
+                @click="form.trade=n.trade_id;returnSelection()">{{n.trade_title}}</font>
+        </span> </div>
     </li>
     <li class="item">
+      <p class="title">价格</p>
+      <div class="list"><span v-for="(n,index) in arr.priceArr"
+              :key="index">
+          <font :class="{'active':n.content===form.price}"
+                @click="form.price=n.content;returnSelection()">{{n.title}}</font>
+        </span> </div>
+    </li>
+    <li class="item">
+      <p class="title">其他</p>
+      <div class="list"><span v-for="(n,index) in arr.otherArr"
+              :key="index">
+          <font :class="{'active':index===form.other}"
+                @click="form.other=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- 地区范围 -->
+    <li class="item"
+        v-if="form.other===0">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.placeArr"
+              :key="index">
+          <font :class="{'active':index===form.place}"
+                @click="form.place=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- 扣分情况 -->
+    <li class="item"
+        v-if="form.other===1">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.partArr"
+              :key="index">
+          <font :class="{'active':index===form.part}"
+                @click="form.part=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- 纳税人资质 -->
+    <li class="item"
+        v-if="form.other===2">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.tax"
+              :key="index">
+          <font :class="{'active':index===form.tax}"
+                @click="form.tax=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- 是否带货 -->
+    <li class="item"
+        v-if="form.other===3">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.optionArr"
+              :key="index">
+          <font :class="{'active':index===form.bring}"
+                @click="form.bring=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- 提供货源 -->
+    <li class="item"
+        v-if="form.other===4">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.optionArr"
+              :key="index">
+          <font :class="{'active':index===form.source}"
+                @click="form.source=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- 商标类别 -->
+    <li class="item"
+        v-if="form.other===5">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.cate"
+              :key="index">
+          <font :class="{'active':n.cate_id===form.transter_id}"
+                @click="form.transter_id=n.cate_id;returnSelection()">{{n.cate_title}}</font>
+        </span> </div>
+    </li>
+    <!-- 商标过户 -->
+    <li class="item"
+        v-if="form.other===6">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.transferArr"
+              :key="index">
+          <font :class="{'active':index===form.transfer}"
+                @click="form.transfer=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- 提供货源 -->
+    <li class="item"
+        v-if="form.other===7">
+      <p class="title"></p>
+      <div class="list qt"><span v-for="(n,index) in arr.optionArr"
+              :key="index">
+          <font :class="{'active':index===form.group}"
+                @click="form.group=index;returnSelection()">{{n}}</font>
+        </span> </div>
+    </li>
+    <!-- <li class="item">
       <p class="title">更多选项</p>
       <div class="list gengduo">
         <el-checkbox-group v-model="checkList">
@@ -77,27 +204,28 @@
           <el-checkbox label="带团队转让"></el-checkbox>
         </el-checkbox-group>
       </div>
-    </li>
-    <li class="item">
+    </li> -->
+    <!-- <li class="item">
       <p class="title">全部</p>
       <div class="list quanbu"><span>正在竞拍 ( 0 )</span> <span>等待竞拍 ( 0 )</span><span>竞拍完成 ( 0 )</span></div>
-    </li>
-    <li class="item"
-        v-if="other.active==1">
+    </li> -->
+    <!-- <li class="item">
       <p class="title">价格</p>
       <div class="list"><span :class="{'active':true}">5万-10万</span> <span>10万-20万</span><span>20万-50万</span><span>50万以上</span></div>
-    </li>
-    <li class="item"
-        v-if="other.active==1">
+    </li> -->
+    <!-- <li class="item">
       <p class="title">其他</p>
-      <div class="list"><span :class="{'active':true}">地区范围</span> <span>扣分情况</span><span>纳税人资质</span><span>是否带货</span></div>
-    </li>
-    <li class="item"
-        v-if="other.active==1">
+      <div class="list"><span :class="{'active':true}">地区范围</span> <span>扣分情况</span><span>纳税人资质</span><span>是否带货</span><span>提供货源</span><span>商标类别</span> <span>商标过户</span><span>团队转让</span></div>
+    </li> -->
+    <li class="item">
       <p class="title">默认排序</p>
-      <div class="list moren"><span>出售价格 <span class="s"><img src="../../assets/img/bug/a4.png"
-                 alt=""><img src="../../assets/img/bug/a5.png"
-                 alt=""></span></span></div>
+      <div class="list moren"><span>
+          <font>出售价格</font> <span class="s"><img src="../../assets/img/bug/a4.png"
+                 alt=""
+                 @click="returnSelection()"><img src="../../assets/img/bug/a5.png"
+                 alt=""
+                 @click="returnSelection()"></span>
+        </span></div>
     </li>
 
   </section>
@@ -108,21 +236,96 @@ export default {
   data() {
     return {
       input23: "",
-      value9: [4, 8],
+      value9: [1, 1],
       other: {
-        active: 1 //1.购买网店 2.网店拍卖
+        active: 0, //0.天猫 1.淘宝
+        type: 0 //0,购买网店 1.网店拍卖
+      },
+      form: {
+        page: 1, // 页数，默认1
+        limit: 15, //每一页的条数，默认15
+        title: "", //搜索框搜索信息
+        terr: "", //所在平台  0.天猫 1.淘宝
+        type: "", //商城类型
+        trade: "", //所属行业
+        brand: "", //商标类型
+        price: "", //价格    如：10000，50000
+        place: "", //所属地区范围    0不限1华北2东北3华南4西北5华中6西南7海外
+        part: "", //扣分情况 0不限1全无2一般3严重4出售假违规扣分
+        tax: "", //纳税人资质    0不限1一般2小规模
+        bring: "", //是否带货    0不限1是2否
+        source: "", //提供货源  0不限1是2否
+        transfer: "", //商标过户  0不限1可以过户2只能授权
+        group: "", //团队转让 0不限1是2否
+        transter_id: "", //商标类型   如：1，2，3
+        sort: "", //排序  1id倒叙2价格倒叙
+        letter: [1, 1], //信誉等级  后端要字符串,
+        other: "" //其他
+      },
+      arr: {
+        terrArr: [], //平台类型
+        typeArr: [], //商城类型
+        trade: [], //所属行业
+        cate: [], //其他->商标类别
+        brandArr: ["无", "R标", "TM标"], //商标类型
+        // priceArr: ["5W-10W", "10W-20W", "20W-50W", "50W+"], //价格类型
+        priceArr: [
+          {
+            title: "5W-10W",
+            content: "50000,100000"
+          },
+          {
+            title: "10W-20W",
+            content: "100000,200000"
+          },
+          {
+            title: "20W-50W",
+            content: "200000,500000"
+          },
+          {
+            title: "50W-500W",
+            content: "500000,5000000"
+          }
+        ], //价格类型
+        otherArr: [
+          "地区范围",
+          "扣分情况",
+          "纳税人资质",
+          "是否带货",
+          "提供货源",
+          "商标类别",
+          "商标过户",
+          "团队转让"
+        ], //其他类型
+        optionArr: ["不限", "是", "否"], //普遍选项
+        transferArr: ["不限", "可以过户", "只能授权"], //商标过户
+        tax: ["不限", "一般", "小规模"], //纳税人资质
+        placeArr: [
+          "不限",
+          "华北",
+          "东北",
+          "华南",
+          "西北",
+          "华中",
+          "西南",
+          "海外"
+        ], //所属地区范围
+        partArr: ["不限", "全无", "一般", "严重", "出售假违规扣分"] //扣分情况
       }
     };
   },
 
   created() {
     console.log("当前路径是:", this.path);
-    //1为购买网店2为网店拍卖
-    this.path == "/buyshop" ? (this.other.active = 1) : (this.other.active = 2);
+    //0为购买网店1为网店拍卖
+    this.path == "/buyshop" ? (this.other.type = 0) : (this.other.type = 1);
+    this.getSelection();
+    this.returnSelection();
   },
   methods: {
     formatTooltip(val) {
-      console.log(val);
+      console.log(val, this.value9);
+
       if (val < 6) {
         return `${val}钻`;
       } else if (val < 11) {
@@ -131,6 +334,20 @@ export default {
         return `${val - 10}金冠`;
       }
       //   return val / 100;
+    },
+    //获取筛选条件
+    getSelection() {
+      this.$axios.get(this.$location.condition).then(res => {
+        console.log(res);
+        this.arr.terrArr = _.get(res, "data.terr", []);
+        this.arr.trade = _.get(res, "data.trade", []);
+        this.arr.cate = _.get(res, "data.cate", []);
+        console.log(this.arr.cate);
+      });
+    },
+    returnSelection() {
+      console.log(123);
+      this.$emit("returnForm", this.form);
     }
   }
 };
@@ -179,7 +396,6 @@ export default {
   }
 
   .item {
-    // border: 1px solid red;
     list-style: none;
     padding: 15px 0;
     margin: 0 30px;
@@ -187,10 +403,10 @@ export default {
     align-items: center;
     border-bottom: 1px solid rgba(234, 234, 234, 1);
     .title {
-      //   border: 1px solid red;
       display: block;
       width: 56px;
       height: 15px;
+      line-height: 15px;
       font-size: 14px;
       font-family: MicrosoftYaHei;
       font-weight: 400;
@@ -207,6 +423,7 @@ export default {
       margin-left: 37px;
       flex: 1;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
 
       > span {
@@ -214,39 +431,45 @@ export default {
         font-family: "MicrosoftYaHei";
         font-weight: 400;
         color: rgba(153, 153, 153, 1);
-        margin-right: 52px;
-
+        // margin-right: 52px;
+        width: 100px;
+        padding: 1px 0;
         // border: 1px solid red;
+        text-align: left;
+
+        font {
+          cursor: pointer;
+          padding-left: 10px;
+        }
       }
 
       .active {
         border-radius: 4px;
-        padding: 1px 10px 1px;
+        padding: 1px 9px 1px;
         border: 1px solid rgba(254, 112, 4, 1);
         color: rgba(255, 113, 10, 1);
       }
     }
-    .suoshu {
-      flex-wrap: wrap;
-      span {
-        width: 93px;
-        margin-right: 0;
-        text-align: left;
-        a.active {
-          border-radius: 4px;
-          padding: 1px 10px 1px;
-          border: 1px solid rgba(254, 112, 4, 1);
-          color: rgba(255, 113, 10, 1);
-        }
+    .dpzt {
+      border: 1px solid red;
+      > span {
+        width: 140px;
+      }
+      span:first-child {
+        width: 100px;
+      }
+    }
+    .qt {
+      span:last-child {
+        border: 1px solid red;
+        width: 130px;
       }
     }
     .moren {
       > span {
-        border: 1px solid red;
         display: flex;
         .s {
           margin-left: 5px;
-          border: 1px solid blue;
           display: flex;
           flex-direction: column;
           justify-content: space-around;
@@ -257,6 +480,17 @@ export default {
       }
     }
     .xinyong {
+      > font {
+        cursor: pointer;
+        width: 50px;
+        height: 18px;
+        background: rgba(255, 113, 10, 1);
+        border-radius: 9px;
+        font-size: 12px;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 1);
+      }
       .deng {
         font-size: 12px;
         font-family: MicrosoftYaHei;
@@ -268,7 +502,6 @@ export default {
         }
         .deng_ke {
           width: 880px;
-          //   border: 1px solid blue;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -302,23 +535,6 @@ export default {
           }
         }
       }
-    }
-    .gengduo {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      .el-checkbox__label {
-        font-size: 14px;
-        font-family: MicrosoftYaHei;
-        font-weight: 400;
-        color: rgba(153, 153, 153, 1);
-        margin-top: 1px;
-      }
-    }
-    .quanbu {
-      display: flex;
-      align-items: center;
-      margin-top: 1px;
     }
   }
 }

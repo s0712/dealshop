@@ -1,113 +1,109 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
-  </div>
-</template>
+  <section class="hello">
+    <div class="banner">
+      <div class="info">
+        <p>
+          <el-radio v-model="radio"
+                    label="1">天猫店</el-radio>
+          <el-radio v-model="radio"
+                    label="2">淘宝店</el-radio>
+          <el-radio v-model="radio"
+                    label="3">其他网站</el-radio>
 
+        </p>
+        <div class="input">
+          <el-input v-model="input"></el-input>
+          <span>立即搜索</span>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <foot></foot>
+  </section>
+</template>
 <script>
+import foot from "../components/parts/foot";
 export default {
-  name: 'HelloWorld',
-  data () {
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      radio: "",
+      input: ""
+    };
+  },
+  components: {
+    foot
+  },
+  created() {},
+  methods: {}
+};
+</script>
+<style  lang="scss">
+.hello {
+  width: 100%;
+  .banner {
+    width: 100%;
+    background: url("../assets/img/bug/i_banner.png") no-repeat center center;
+    height: 666px;
+    display: flex;
+    align-items: flex-end;
+    .info {
+      width: 1140px;
+      height: 140px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+      margin: 0 auto;
+      margin-bottom: 90px;
+      > p {
+        text-align: left;
+        padding-left: 32px;
+        margin: 24px 0;
+        .el-radio {
+          margin-right: 67px;
+        }
+      }
+      > div {
+        display: flex;
+        padding: 0 30px;
+        .el-input {
+          .el-input__inner {
+            height: 50px;
+            border: none;
+          }
+        }
+        > span {
+          margin-left: 20px;
+          width: 189px;
+          height: 50px;
+          background: rgba(224, 118, 74, 1);
+          border-radius: 4px;
+          font-size: 18px;
+          font-family: MicrosoftYaHei;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 1);
+          line-height: 50px;
+          cursor: pointer;
+        }
+      }
     }
   }
-}
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+  .content {
+    display: flex;
+    justify-content: space-between;
+    > div {
+      box-sizing: border-box;
+      border-right: 1px solid #eee;
+      flex: 1;
+      height: 212px;
+      background: rgba(243, 243, 243, 1);
+    }
+    div:last-child {
+      border: none;
+    }
+  }
 }
 </style>
